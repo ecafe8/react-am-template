@@ -1,4 +1,5 @@
 import Ajax from 'common/utils/ajax';
+import TidaUtils from 'common/utils/tida';
 
 /**
  * @api {get} /getStoreFollowUrl 获取店铺关注链接
@@ -25,7 +26,7 @@ import Ajax from 'common/utils/ajax';
 export const getStoreFollowUrl = async (params) => await Ajax.req({
   url: 'getStoreFollowUrl',
   params: {
-    tbSellerUid: CFG.sellerId,
+    tbSellerUid: TidaUtils.getTbInfo('sellerId'),
     ...params,
   },
   errorNotice: '获取店铺关注链接失败，请稍后再试。',
@@ -58,7 +59,7 @@ export const isStoreFollow = async (params) => await Ajax.req({
   url: 'isStoreFollow',
   params: {
     fansNick: CFG.mixNick,
-    sellerNick: CFG.sellerNick,
+    sellerNick: TidaUtils.getTbInfo('sellerNick'),
     ...params,
   },
   errorNotice: '获取关注店铺状态失败，请稍后再试。',
@@ -90,7 +91,7 @@ export const isStoreFollow = async (params) => await Ajax.req({
 export const getCartUrl = async (params) => await Ajax.req({
   url: 'getCartUrl',
   params: {
-    tbSellerUid: CFG.sellerId,
+    tbSellerUid: TidaUtils.getTbInfo('sellerId'),
     ...params,
   },
   errorNotice: '获取加购URL失败，请稍后再试。',

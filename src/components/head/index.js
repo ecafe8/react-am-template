@@ -38,10 +38,11 @@ export default class Head extends React.Component {
   }
 
   renderLeftContent() {
-    if (CFG && CFG.shop && CFG.shop.logoUrl) {
+    const logoUrl = TidaUtils.getTbInfo('shopLogoUrl');
+    if (logoUrl) {
       return (
         <div className={css.logo}>
-          <img src={CFG.shop.logoUrl} />
+          <img src={logoUrl} />
         </div>
       );
     }
@@ -51,6 +52,7 @@ export default class Head extends React.Component {
   }
 
   render() {
+    const shopTitle = TidaUtils.getTbInfo('shopTitle');
     const props = {
       className: css.head,
       mode: 'light',
@@ -64,7 +66,7 @@ export default class Head extends React.Component {
     };
     return (
       <NavBar {...props}>
-        {CFG.shop.title || '欢迎访问本店'}
+        {shopTitle || '欢迎访问本店'}
       </NavBar>
     );
   }
