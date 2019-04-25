@@ -2,13 +2,24 @@ import { getCartUrl, getStoreFollowUrl, isStoreFollow } from 'api';
 
 export default class TidaUtils {
 
-  // 从CFG中获取一些常用淘宝信息字段
+  /**
+   * 从CFG中获取一些常用淘宝信息字段
+   tbInfo: {
+      sellerId: '1862941194',
+      sellerNick: '成都盛夏科技',
+      shopId: '149076581',
+      shopTitle: '盛夏科技旗舰店',
+      shopLogoUrl: '//img.alicdn.com/bao/uploaded//cd/e6/TB1yGM_MVXXXXccaXXXSutbFXXX.jpg',
+    },
+   * @param key
+   * @returns {*}
+   */
   static getTbInfo(key = 'sellerId') {
     if (!CFG) {
       return undefined;
     }
 
-    return (CFG.qsData && CFG.qsData[key]) || CFG[key];
+    return (CFG.qsData && CFG.qsData[key]) || (CFG.tbInfo && CFG.tbInfo[key]);
   }
 
   static ready(callback = function() {}) {
@@ -24,7 +35,7 @@ export default class TidaUtils {
     Tida.hideTitle();
   }
 
-  static followStore() {
+  static async followStore(needPopWhenPageBack = false) {
     // Tida.subscribe.add({
     //   accountId: TidaUtils.getTbInfo('sellerId'),
     // }, function(data) {
@@ -33,11 +44,24 @@ export default class TidaUtils {
     //   console.log(JSON.stringify(e));
     // });
 
-    getStoreFollowUrl().then((data) => {
+    // rax首页定制中，当关注后，需要自动关闭当前页面。
+    if (needPopWhenPageBack) {
+      TidaUtils.viewVisibleWatcher(() => {
+        TidaUtils.back();
+      });
+    }
+
+    const data = await getStoreFollowUrl();
+
+
+    return new Promise((resolve) => {
       if (data && data.url) {
         Tida.pushWindow(data.url + '&method=replace');
+        resolve(true);
       }
+      resolve(false);
     });
+
   }
 
   static cart({itemId, skuId = 0}) {
@@ -78,7 +102,7 @@ export default class TidaUtils {
     window.location.href = `https://item.taobao.com/item.htm/?id=${itemId}`;
   }
 
-  static backToTB() {
+  static back() {
     Tida.popWindow();
   }
 
