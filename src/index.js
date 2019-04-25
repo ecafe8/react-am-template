@@ -4,9 +4,17 @@ import Layout from './layout';
 import './index.less';
 import { Helmet } from 'react-helmet';
 import Error from 'components/error';
-
 import initReactFastclick from 'react-fastclick';
-initReactFastclick();
+import initQueryStringData from 'common/utils/sxQueryStringData';
+
+// 默认执行初始化方法
+(function() {
+  // 初始化 Fastclick
+  initReactFastclick();
+
+  // 初始化 query string 数据
+  initQueryStringData();
+})();
 
 // import('vconsole').then(VConsole => {
 //   new VConsole();
@@ -16,7 +24,7 @@ initReactFastclick();
 // const ICON_FONT_URL = '//at.alicdn.com/t/font_1135128_pv7wts3a35k.js';
 const renderHtmlMeta = () => {
   const metaProps = {
-    title: CFG.data.title || '',
+    title: (CFG && CFG.data && CFG.data.title) || '',
     // script: [{
     //   type: 'text/javascript',
     //   charset: 'UTF-8',

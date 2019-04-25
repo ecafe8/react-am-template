@@ -1,4 +1,16 @@
+import { getCartUrl, getStoreFollowUrl, isStoreFollow } from 'api';
+
 export default class TidaUtils {
+
+  // 从CFG中获取一些常用淘宝信息字段
+  static getTbInfo(key = 'sellerId') {
+    if (!CFG) {
+      return undefined;
+    }
+
+    return (CFG.qsData && CFG.qsData[key]) || CFG[key];
+  }
+
   static ready(callback = function() {}) {
     Tida.ready({
       module: ['device', 'media', 'server', 'social', 'widget', 'sensor', 'share', 'buy', 'draw', 'im', 'calendar', 'prize'],
@@ -12,21 +24,38 @@ export default class TidaUtils {
     Tida.hideTitle();
   }
 
-  static followStore({sellerId, callback = function() {}}) {
-    Tida.subscribe.add({
-      accountId: sellerId,
-    }, function(data) {
-      callback(data);
-    }, (e) => {
-      console.log(JSON.stringify(e));
+  static followStore() {
+    // Tida.subscribe.add({
+    //   accountId: TidaUtils.getTbInfo('sellerId'),
+    // }, function(data) {
+    //   callback(data);
+    // }, (e) => {
+    //   console.log(JSON.stringify(e));
+    // });
+
+    getStoreFollowUrl().then((data) => {
+      if (data && data.url) {
+        Tida.pushWindow(data.url + '&method=replace');
+      }
     });
   }
 
-  static cart({itemId, skuId, sellerNick}) {
+  static cart({itemId, skuId = 0}) {
+
     Tida.cart({
-      itemId: itemId,
-    }, function(data) {
+      sellerNick: TidaUtils.getTbInfo('sellerNick'),
+      itemId,
+      skuId
     });
+
+    // todo 线上的tida版本有问题，回跳页面不关闭。先用旧版方法。
+    // getCartUrl({
+    //   itemIds: `${itemId}_${skuId}_1`,
+    // }).then((data) => {
+    //   if (data && data.result) {
+    //     Tida.pushWindow(data.result + '&method=replace');
+    //   }
+    // });
   }
 
   static itemFavor({itemId}) {
@@ -71,6 +100,19 @@ export default class TidaUtils {
   }
 
   static toast(msg = '系统繁忙！') {
-    Tida.toast(msg);
+    if (Tida.toast) {
+      Tida.toast(msg);
+    } else {
+      alert(msg);
+    }
+  }
+
+  static getMixNick() {
+    Tida.mixNick({}, function(data) {
+      if (data && data.data && data.data.mixnick) {
+        // console.log('mixnick:', data.data.mixnick);
+        CFG.mixNick = data.data.mixnick;
+      }
+    });
   }
 }

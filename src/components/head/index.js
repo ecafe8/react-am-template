@@ -6,6 +6,7 @@ import Icon from 'components/icon';
 import svgHome from 'assets/icons/home-fill.svg';
 import svgStar from 'assets/icons/star.svg';
 import css from './index.less';
+import TidaUtils from 'common/utils/tida';
 
 export default class Head extends React.Component {
 
@@ -22,8 +23,14 @@ export default class Head extends React.Component {
   }
 
   renderRightContent() {
+    const props = {
+      className: css.fav,
+      onClick: () => {
+        TidaUtils.followStore();
+      }
+    };
     return (
-      <div className={css.fav}>
+      <div {...props}>
         <div><Icon type={svgStar} /></div>
         <div>关注店铺</div>
       </div>

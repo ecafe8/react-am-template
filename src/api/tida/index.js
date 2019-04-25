@@ -24,7 +24,10 @@ import Ajax from 'common/utils/ajax';
  */
 export const getStoreFollowUrl = async (params) => await Ajax.req({
   url: 'getStoreFollowUrl',
-  params,
+  params: {
+    tbSellerUid: CFG.sellerId,
+    ...params,
+  },
   errorNotice: '获取店铺关注链接失败，请稍后再试。',
 });
 
@@ -53,7 +56,11 @@ export const getStoreFollowUrl = async (params) => await Ajax.req({
  */
 export const isStoreFollow = async (params) => await Ajax.req({
   url: 'isStoreFollow',
-  params,
+  params: {
+    fansNick: CFG.mixNick,
+    sellerNick: CFG.sellerNick,
+    ...params,
+  },
   errorNotice: '获取关注店铺状态失败，请稍后再试。',
 });
 
@@ -81,7 +88,10 @@ export const isStoreFollow = async (params) => await Ajax.req({
  * }
  */
 export const getCartUrl = async (params) => await Ajax.req({
-  url: 'isStoreFollow',
-  params,
+  url: 'getCartUrl',
+  params: {
+    tbSellerUid: CFG.sellerId,
+    ...params,
+  },
   errorNotice: '获取加购URL失败，请稍后再试。',
 });

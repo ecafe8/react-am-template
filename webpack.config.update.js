@@ -110,6 +110,7 @@ module.exports = (config) => {  // eslint-disable-line
         components: srcPath + '/components',
         common: srcPath + '/common',
         assets: srcPath + '/assets',
+        api: srcPath + '/api',
       }
     }
   };
