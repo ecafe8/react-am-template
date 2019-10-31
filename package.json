@@ -48,7 +48,7 @@
     "babel-preset-stage-1": "^6.24.1",
     "cross-env": "^5.0.1",
     "css-loader": "^0.28.4",
-    "eslint": "3.19",
+    "eslint": "6.6",
     "eslint-import-resolver-webpack": "^0.8.3",
     "eslint-plugin-import": "^2.6.0",
     "eslint-plugin-react": "^7.1.0",
